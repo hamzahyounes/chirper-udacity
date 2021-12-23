@@ -248,11 +248,12 @@ function formatTweet ({ author, text, replyingTo = null }) {
   }
 }
 
-export function _saveTweet ({ text, author, replyingTo }) {
+export function _saveTweet ({  author, text, replyingTo }) {
+  console.log("The author that comes from _saveTweet: ", author)
   return new Promise((res, rej) => {
     const formattedTweet = formatTweet({
-      text,
       author,
+      text,
       replyingTo
     })
 
@@ -279,6 +280,8 @@ export function _saveTweet ({ text, author, replyingTo }) {
       }
       const desiredTweets = users[author].tweets.concat([formattedTweet.id])
       console.log("The solution insha'llah ", desiredTweets)
+  console.log("The author that comes from _saveTweet: ", author)
+
       users = {
         ...users,
         [author]: {
