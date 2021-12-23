@@ -5,6 +5,9 @@ import TiHeartOutline from 'react-icons/lib/ti/heart-outline'
 import TiHeartFullOutline from 'react-icons/lib/ti/heart-full-outline'
 import { formatTweet, formatDate } from '../utils/helpers'
 import { handleToggleTweet } from '../actions/tweets'
+import { Redirect } from 'react-router-dom'
+import { Link } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 
 class Tweet extends Component {
     handleLike = (e) => {
@@ -19,11 +22,10 @@ class Tweet extends Component {
     }
     toParent = (e, id) => {
         e.preventDefault();
-        //todo: Redirect to Parent tweet.
-        console.log("Clicked")
+        this.props.history.push(`/tweet/${id}`)
     }
     render() {
-        const { tweet } = this.props;
+        const { tweet, id } = this.props;
         if(!tweet)
             return <p>This tweet doesn't existed.</p>
 
@@ -34,7 +36,7 @@ class Tweet extends Component {
         } = tweet;
 
         return(
-            <div className="tweet">
+            <Link to={`/tweet/${id}`} className="tweet">
                 <img 
                     src={avatar}
                     alt= {`Avatar of ${name}`}
@@ -51,7 +53,7 @@ class Tweet extends Component {
                         <p>{text}</p>
                     </div>
                     <div className="tweet-icons">
-                        <TiArrowBackOutline className="tweet-icon"/>
+                        <Link to={`/tweet/${id}`}><TiArrowBackOutline className="tweet-icon" /></Link>
                         <span>{replies !== 0 && replies}</span>
                         <button className="heart-button" onClick={this.handleLike}>
                             {hasLiked
@@ -61,12 +63,12 @@ class Tweet extends Component {
                         <span>{likes? likes : null}</span>
                     </div>
                 </div>
-            </div>
+            </Link>
         )
     }
 }
 
-export default connect(mapStateToProps)(Tweet);
+export default withRouter(connect(mapStateToProps)(Tweet));
 
 function mapStateToProps({ authedUser, users, tweets}, { id }) {
     //Remember: the second argument of mapStateToProps can be the props come from the parent [ownProps].
